@@ -8,6 +8,8 @@ async function handleFormSubmit(event){
             emailId : event.target.email.value,
             password: event.target.password.value
         }
+        // console.log(userDetails);
+        
 
         // Send POST request to save expense in the database
         let response = await axios.post("http://localhost:3000/users/signup", userDetails);
