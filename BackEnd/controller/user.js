@@ -66,10 +66,10 @@ exports.loginUser = async (req, res, next)=>{
         const user = await User.findOne({ where: { email: email } });
 
         if(user==null){
-            return res.status(400).json("Email is not Correct please provid the correct email to login");
+            return res.status(404).json("User not found");
         }
         if(user.password!=password){
-            return res.status(400).json("Incorrect Password please try with correct password")
+            return res.status(401).json("User not authorized")
         }
         res.status(200).send("User Logged in successfully");
     }

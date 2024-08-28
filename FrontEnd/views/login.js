@@ -21,7 +21,18 @@ async function handleFormSubmit(event){
             console.error("Error 400: Bad Request. Check the input data.", error.response.data);
             // Display a user-friendly message
             alert("Login failed: Please check your email and password.");
-        } else {
+        } 
+        else if(error.response && error.response.status === 404){
+            console.error("Error 404: Bad Request. Check the input data.", error.response.data);
+            // Display a user-friendly message
+            alert("Login failed: User Not Found.");
+        }
+        else if(error.response && error.response.status === 401){
+            console.error("Error 404: Bad Request. Check the input data.", error.response.data);
+            // Display a user-friendly message
+            alert("Login failed: User not authorized");
+        }
+        else {
             console.error("An unexpected error occurred:", error);
             alert("An unexpected error occurred. Please try again later.");
         }
