@@ -14,6 +14,11 @@ async function handleFormSubmit(event){
         // Send POST request to save expense in the database
         let response = await axios.post("http://localhost:3000/users/signup", userDetails);
         console.log(response);
+        localStorage.setItem('token', response.data.token);
+        
+        
+        
+        alert("User Signed In Successfully");
     }
     catch (error){
         console.log("Error : "+error); 

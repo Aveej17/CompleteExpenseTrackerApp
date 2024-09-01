@@ -25,9 +25,17 @@ app.use('/users', userRoutes);
 app.use('/expenses', expenseRoutes);
 
 
+// Associations
+User.hasMany(Expense);
+Expense.belongsTo(User);
+
+
 // Automatic table creation if already no table present
 
-sequelize.sync().then(
+sequelize
+.sync()
+// .sync({force:true})
+.then(
     result =>{
         // console.log(result);
         app.listen(3000);
