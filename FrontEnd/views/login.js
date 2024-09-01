@@ -14,6 +14,7 @@ async function handleFormSubmit(event){
         let response = await axios.post("http://localhost:3000/users/login", userDetails);
         console.log(response);
         alert("userLoggedin Successfully");
+        window.location.href = "expenses.html";
     }
     catch (error) {
         // Log error message

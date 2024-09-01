@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Page</title>
+</head>
+<body>
+    <form onsubmit="handleFormSubmit(event)">
+        <h1 class="mb-4">Expense Tracker</h1>
+        <form onsubmit="handleFormSubmit(event)">
+            
+                <label for="amount" >Choose Expense Amount</label>
+                <input type="number" id="amount" name="amount"  required>
+            
+                <label for="description" >Choose Description</label>
+                <input type="text" id="description" name="description"  required>
+           
+                <label for="category" >Choose Category</label>
+                <select id="category" name="category" required>
+                    <option>Movie</option>
+                    <option>Food</option>
+                    <option>Rent</option>
+                    <option>Travel</option>
+                </select>
+            
+            <button type="submit" >Add Expense</button>
+        </form>
+        <ul  id="expenseList"></ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+    <script src="expenses.js"></script>
+</body>
+</html>

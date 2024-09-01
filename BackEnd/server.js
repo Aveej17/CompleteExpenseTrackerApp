@@ -12,14 +12,17 @@ const sequelize = require('./util/database');
 
 
 const User = require('./model/users');
+const Expense = require('./model/expenses');
 
 const userRoutes = require('./route/user');
+const expenseRoutes = require('./route/expense')
 
 //cors
 app.use(cors());
 
 
 app.use('/users', userRoutes);
+app.use('/expenses', expenseRoutes);
 
 
 // Automatic table creation if already no table present

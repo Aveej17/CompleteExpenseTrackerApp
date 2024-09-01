@@ -1,4 +1,3 @@
-// const { where } = require('sequelize');
 const User = require('../model/users');
 const bcrypt = require('bcrypt');
 
@@ -15,8 +14,8 @@ async function hashPassword(password, saltRounds) {
     try {
         // Await the bcrypt hash operation
         const hash = await bcrypt.hash(password, saltRounds);
-        // console.log("Hashed password:", hash); // Log the hash or use it as needed
-        return hash; // Return the hash if needed
+        
+        return hash; 
     } catch (err) {
         console.error(err);
     }
@@ -55,7 +54,7 @@ exports.createUser = async (req, res, next)=>{
         // console.log("Stored hash:", hash); // Access the hashed password here
         
         if(user==null){
-            
+
             const user = await User.create({
                 name:name,
                 email:email,
