@@ -1,5 +1,6 @@
 // const { where } = require('sequelize');
 const User = require('../model/users');
+const bcrypt = require('bcrypt');
 
 
 
@@ -8,6 +9,27 @@ function isStringValid(string){
         return true;
     }
     return false;
+}
+
+async function hashPassword(password, saltRounds) {
+    try {
+        // Await the bcrypt hash operation
+        const hash = await bcrypt.hash(password, saltRounds);
+        // console.log("Hashed password:", hash); // Log the hash or use it as needed
+        return hash; // Return the hash if needed
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function compare(userPassword, hashedPassword) {
+    try{
+        const isMatch = await bcrypt.compare(userPassword, hashedPassword);
+        return isMatch;
+    }catch{
+        throw new Error("Something went wrong");
+    }
+    
 }
 
 exports.createUser = async (req, res, next)=>{
@@ -26,12 +48,18 @@ exports.createUser = async (req, res, next)=>{
 
         const user = await User.findOne({ where: { email: email } });
 
+        // Hashing the password
+        const saltRounds = 10;
+        
+        const hash = await hashPassword(password, saltRounds);
+        // console.log("Stored hash:", hash); // Access the hashed password here
+        
         if(user==null){
             
             const user = await User.create({
                 name:name,
                 email:email,
-                password:password
+                password:hash
             });
             res.send(user);
         }
@@ -46,18 +74,9 @@ exports.createUser = async (req, res, next)=>{
 exports.loginUser = async (req, res, next)=>{
 
     try{
-        // console.log(req.body);
-        // console.log("Login Request");
-        
-        
 
         const email = req.body.emailId;
-        const password = req.body.password;
-
-        // console.log(email);
-        // console.log(password);
-        
-        
+        const password = req.body.password;  
 
         if(isStringValid(email) || isStringValid(password)){
             return res.status(400).json("Missing parameters to login to the account");
@@ -68,10 +87,14 @@ exports.loginUser = async (req, res, next)=>{
         if(user==null){
             return res.status(404).json("User not found");
         }
-        if(user.password!=password){
-            return res.status(401).json("User not authorized")
+        
+        const passCheck = await compare(password, user.password);
+        
+        if(passCheck){
+            return res.status(200).send("User Logged in successfully");    
         }
-        res.status(200).send("User Logged in successfully");
+        return res.status(401).json("User not authorized")
+        
     }
     catch(err){
         console.log(err);
