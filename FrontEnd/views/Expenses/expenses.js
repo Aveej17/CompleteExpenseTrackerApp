@@ -45,14 +45,20 @@ window.addEventListener("DOMContentLoaded", async () => {
         });
         
         // console.log(response);
-        // console.log(response.data);
+        console.log(response.data);
         
         // Display each expense on the screen
-        if(response.data.length>0){
-            response.data.forEach(expense => {
+        if(response.data.expenses.length>0){
+            response.data.expenses.forEach(expense => {
                 addExpenseToList(expense);
             }
         );
+        }
+        // Hiding the premium button for the premium user
+        if (response.data.isPremium) {
+            document.getElementById('rzp-button').style.display = 'none';
+            document.getElementById('premium-message').style.display = 'block'; 
+            document.getElementById('show leaderBoard').style.display = 'block'; 
         }
     } catch (error) {
         console.error("Error loading expenses:", error);
@@ -152,6 +158,11 @@ document.getElementById('rzp-button').onclick = async function (e) {
                     });
         
                     alert('You are a premium user now!');
+                    document.getElementById('rzp-button').style.display = 'none';
+                    document.getElementById('premium-message').style.display = 'block'; 
+                    document.getElementById('show leaderBoard').style.display = 'block'; 
+
+
                 } catch (error) {
                     console.error("Error updating transaction status:", error);
                     alert('Something went wrong while updating the transaction status.');
@@ -242,3 +253,35 @@ document.getElementById('rzp-button').onclick = async function (e) {
 //         }
 //     }
 // }
+
+document.getElementById('show leaderBoard').onclick = async function (e) {
+
+    const token = localStorage.getItem('token');
+    const response = await axios.get('http://localhost:3000/premium/leaderBoard',{headers: {
+        Authorization: 'Bearer ' + token}
+    });
+    // console.log(response.data);
+
+    // console.log(typeof(response.data));
+    
+
+    // Check if the leaderboard has data to display
+    if (response.data) {
+        // Show the leaderboard header
+        document.getElementById('leaderBoard').style.display = 'block';
+    
+        // Get the leaderboard item container
+        const leaderBoardItem = document.getElementById('leaderBoardItem');
+        
+        // Clear any existing items to avoid duplicates
+        leaderBoardItem.innerHTML = '';
+
+        for (const key in response.data) {
+            if (response.data.hasOwnProperty(key)) {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Name : ${key} - Amount Spent : ${response.data[key]}`; 
+                leaderBoardItem.appendChild(listItem);
+            }
+          }
+    }
+}

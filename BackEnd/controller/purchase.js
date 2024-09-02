@@ -1,6 +1,7 @@
 const Razorpay = require('razorpay');
 const Order = require('../model/orders');
 const { where } = require('sequelize');
+const User = require('../model/users');
 
 
 exports.purchaseCreateController = (req, res, next)=>{
@@ -41,7 +42,8 @@ exports.updatePurchaseController = async (req, res, next) =>{
         await Order.update(
             { paymentId: req.body.payment_id, status: req.body.status },
             { where: { orderId: req.body.order_id } }
-          );
+        );
+        await User.update({isPremiumUser: true}, {where:{ id:req.body.authId}});
           return res.status(201).json({success:true, message:"Payment Status updated"});   
     }
     catch(err){

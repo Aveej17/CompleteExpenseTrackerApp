@@ -29,7 +29,17 @@
         </form>
         <button id="rzp-button" type="submit">BuyPremium</button>
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <p id="premium-message" style="display: none;">You are a premium user!</p>
+        <button id="show leaderBoard" type="submit" style="display: none;">Show Leader Board</button>
+        <br><br>
+        <h1>Expenses</h1>
+        <br>
         <ul  id="expenseList"></ul>
+
+        <br>
+        <h1 id="leaderBoard" style="display: none;">Leader Board</h1>
+        <ul  id="leaderBoardItem"></ul>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
     <script src="expenses.js"></script>

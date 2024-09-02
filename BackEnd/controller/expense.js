@@ -1,9 +1,13 @@
 const Expense = require('../model/expenses');
+const User = require('../model/users');
 const isStringValid = require('../util/stringValidation');
+
 
 exports.getExpenses = async (req, res, next) =>{
     try {
         // console.log(req.body.authId);
+        // console.log("getEX");
+        
         
         if (!req.body.authId) {
             return res.status(400).json({ message: 'User ID is required.' });
@@ -12,8 +16,16 @@ exports.getExpenses = async (req, res, next) =>{
         const expenses = await Expense.findAll({
             where: { userId: req.body.authId }
         });
+        const user = await User.findByPk(req.body.authId);
 
-        res.json(expenses);
+        const customResponse = {
+            expenses:expenses,
+            isPremium:user.isPremiumUser
+        }
+        // console.log(customResponse);
+        
+
+        res.json(customResponse);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

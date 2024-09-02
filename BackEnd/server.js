@@ -18,6 +18,7 @@ const Order = require('./model/orders');
 const userRoutes = require('./route/user');
 const expenseRoutes = require('./route/expense')
 const purchaseRoutes = require('./route/purchase');
+const premiumRoutes = require('./route/premium');
 
 
 //cors
@@ -27,6 +28,7 @@ app.use(cors());
 app.use('/users', userRoutes);
 app.use('/expenses', expenseRoutes);
 app.use('/purchase', purchaseRoutes);
+app.use('/premium', premiumRoutes);
 
 
 // Associations
