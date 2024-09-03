@@ -5,23 +5,35 @@ const sequelize = require('../util/database');
 
 exports.getLeaderBoardController = async (req, res, next)=>{
 
-    try {
-        const leaderBoardOfUsers = await User.findAll({attributes:['id', 'name', [sequelize.fn('sum', sequelize.col('amount')), 'totalCost']],
-            include:[
-                {
-                    model:Expense,
-                    attributes:[]
-                }
-            ],
-            group: ['user.id'],
-            order:[['totalCost', 'DESC']]
-            }
-        )
+
+    try{
+        const leaderBoardOfUsers = await User.findAll({attributes:['id', 'name','totalAmountSpent'], order:[["totalAmountSpent", "DESC"]]});
         // console.log(leaderBoardOfUsers);
+        
         res.status(200).json(leaderBoardOfUsers);
-    }catch(err){
+    }
+    
+    catch(err){
         throw new Error(err);
     }
+
+    // try {
+    //     const leaderBoardOfUsers = await User.findAll({attributes:['id', 'name', [sequelize.fn('sum', sequelize.col('amount')), 'totalCost']],
+    //         include:[
+    //             {
+    //                 model:Expense,
+    //                 attributes:[]
+    //             }
+    //         ],
+    //         group: ['user.id'],
+    //         order:[['totalCost', 'DESC']]
+    //         }
+    //     )
+    //     // console.log(leaderBoardOfUsers);
+    //     res.status(200).json(leaderBoardOfUsers);
+    // }catch(err){
+    //     throw new Error(err);
+    // }
 
     // const userAggregatedExpenses = await Expense.findAll({attributes:['userId', [sequelize.fn('sum', sequelize.col('amount')), 'totalCost']], group:['userId'], order:[['totalCost', 'DESC']]});
     // console.log(userAggregatedExpenses);

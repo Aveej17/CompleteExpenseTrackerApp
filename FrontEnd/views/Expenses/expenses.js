@@ -277,11 +277,13 @@ document.getElementById('show leaderBoard').onclick = async function (e) {
         leaderBoardItem.innerHTML = '';
     
         response.data.forEach(item=>{
-            const listItem = document.createElement('li');
-            listItem.textContent = `Name : ${item.name} - Amount Spent : ${item.totalCost!=null? item.totalCost:0}`; 
-            leaderBoardItem.appendChild(listItem);
             // console.log(item);
             
+            const listItem = document.createElement('li');
+
+            listItem.textContent = `Name : ${item.name} - Amount Spent : ${item.totalAmountSpent}`; 
+            leaderBoardItem.appendChild(listItem);
+            // console.log(item);  
         })
     }
 }

@@ -42,7 +42,16 @@ exports.createExpense = async (req, res, next) =>{
         if(isStringValid(amount) || isNaN(amount) || isStringValid(description) || isStringValid(category) || isStringValid(userId)){
             return res.status(400).json("Missing parameters ");
         }
+        try{
+            const user = await User.findByPk(userId);
+            user.totalAmountSpent = Number(user.totalAmountSpent) + Number(amount);
+            await user.save();
+        }
 
+        catch(err){
+            throw new Error(err);
+        }
+        
         res.send(await Expense.create({
             amount:amount,
             description:description,
