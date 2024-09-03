@@ -28,7 +28,7 @@ async function handleFormSubmit(event) {
   
         // Clear the form fields
         event.target.amount.value = "";
-        event.target.category.value = "";
+        // event.target.category.value = "";
         event.target.description.value = "";
     } catch (error) {
         console.error("Error adding expense:", error);
