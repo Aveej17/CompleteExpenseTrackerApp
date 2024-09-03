@@ -45,7 +45,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         });
         
         // console.log(response);
-        console.log(response.data);
+        // console.log(response.data);
         
         // Display each expense on the screen
         if(response.data.expenses.length>0){
@@ -275,13 +275,13 @@ document.getElementById('show leaderBoard').onclick = async function (e) {
         
         // Clear any existing items to avoid duplicates
         leaderBoardItem.innerHTML = '';
-
-        for (const key in response.data) {
-            if (response.data.hasOwnProperty(key)) {
-                const listItem = document.createElement('li');
-                listItem.textContent = `Name : ${key} - Amount Spent : ${response.data[key]}`; 
-                leaderBoardItem.appendChild(listItem);
-            }
-          }
+    
+        response.data.forEach(item=>{
+            const listItem = document.createElement('li');
+            listItem.textContent = `Name : ${item.name} - Amount Spent : ${item.totalCost!=null? item.totalCost:0}`; 
+            leaderBoardItem.appendChild(listItem);
+            // console.log(item);
+            
+        })
     }
 }

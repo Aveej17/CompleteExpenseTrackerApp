@@ -20,24 +20,14 @@ async function handleFormSubmit(event){
         // window.location.href = "../Expenses/expenses.html";
 
         // Retrieve the token from localStorage
-    const token = localStorage.getItem('token');
-
-    // Check if token is available
-    if (!token) {
-        alert("No token found. Please login again.");
-        window.location.href = "../login.html"; // Redirect to login page
-        return;
-    }
+    
 
     try {
         // Send POST request to log in the user
-        const response = await axios.post("http://localhost:3000/users/login", userDetails, {
-            headers: {
-                Authorization: 'Bearer ' + token
-            }
-        });
+        const response = await axios.post("http://localhost:3000/users/login", userDetails);
 
         alert("User logged in successfully");
+        localStorage.setItem('token', response.data.token);
         window.location.href = "../Expenses/expenses.html"; // Redirect on success
     } catch (error) {
         // Handle error response

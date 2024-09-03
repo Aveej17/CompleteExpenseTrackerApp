@@ -56,7 +56,7 @@ exports.createUser = async (req, res, next)=>{
                 status:"Success",
                 message: "User created Successfully",
                 user,
-                token:generateToken(user.id)
+                
             })
         }
         else{
@@ -85,9 +85,11 @@ exports.loginUser = async (req, res, next)=>{
         }
         
         const passCheck = await compare(password, user.password);
+
+        const token = generateToken(user.id)
         
         if(passCheck){
-            return res.status(200).json({message:"User Logged in successfully", data:user});   
+            return res.status(200).json({message:"User Logged in successfully", data:user, token });   
 
             // return res.status(200).send(user);
             
