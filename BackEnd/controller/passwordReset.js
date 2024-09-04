@@ -281,7 +281,6 @@ module.exports = {
 // const apiKey = client.authentication(['api-key']);
 // 
 // const passEmailApi = new Sib.TransactionalEmailsApi();
-
 // const sender = {
 //     email:"jrneymarjr926@gmail.com"
 // }
