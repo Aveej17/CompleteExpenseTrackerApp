@@ -244,9 +244,7 @@ module.exports = {
 
 // // Configure API key authorization
 // const apiKey = client.authentications['api-key'];
-// apiKey.apiKey = "xsmtpsib-10e4f6544019d86108a5f11278d59ef45ed8c56a7aa9417208ad062a16e86f53-jtW9nrfXHdEyNK54"; 
-
-// // Create an instance of the TransactionalEmailsApi
+// Create an instance of the TransactionalEmailsApi
 // const passEmailApi = new Sib.TransactionalEmailsApi();
 
 // const sender = {
@@ -281,8 +279,7 @@ module.exports = {
 // const client = Sib.ApiClient.instance
 
 // const apiKey = client.authentication(['api-key']);
-// apiKey.apiKey = "xsmtpsib-10e4f6544019d86108a5f11278d59ef45ed8c56a7aa9417208ad062a16e86f53-7hArCOg4q5XSK261";
-
+// 
 // const passEmailApi = new Sib.TransactionalEmailsApi();
 
 // const sender = {
@@ -303,7 +300,7 @@ module.exports = {
 
 // const { MailtrapClient } = require("mailtrap");
 
-// const TOKEN = "74c89fb1a9c8d5d1231311e15565e698";
+// 
 
 // const client = new MailtrapClient({
 //   token: TOKEN,
