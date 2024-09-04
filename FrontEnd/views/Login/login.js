@@ -57,3 +57,7 @@ async function handleFormSubmit(event){
         }
     }
 }
+
+function forgotpassword() {
+    window.location.href = "../ForgotPassword/forgotPassword.html"
+}
