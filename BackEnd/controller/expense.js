@@ -3,6 +3,11 @@ const User = require('../model/users');
 const isStringValid = require('../util/stringValidation');
 const sequelize = require('../util/database');
 
+const AWS = require('aws-sdk');
+
+
+
+require('dotenv').config();
 
 
 exports.getExpenses = async (req, res, next) =>{
@@ -158,4 +163,67 @@ exports.deleteExpenses = async (req, res, next) => {
 
 exports.editExpenses = async (req, res, next) =>{
 
+}
+
+ async function uploadToS3(data, fileName){
+
+    try{
+        let s3bucket = new AWS.S3({
+            accessKeyId:process.env.IAM_USER_KEY,
+            secretAccessKey:process.env.IAM_USER_SECRET
+        });
+        
+        var params = {
+            Bucket: process.env.BUCKET_NAME,
+            Key: fileName,
+            Body:data,
+            ACL:'public-read'
+        }
+    
+        return new Promise((resolve, reject) =>{
+            s3bucket.upload(params, (err, s3response)=>{
+                if(err){
+                    console.log("Somethingwent wrong ", err);
+                    reject(err);
+                        
+                }
+                else{
+                    console.log("success ", s3response);      
+                        resolve(s3response.Location);  
+                    }
+            })
+        })
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({message:"something went wrong", success:false})
+        
+    }
+    
+    
+   
+
+}
+
+exports.downloadFile = async (req, res, next) =>{
+
+    try{// console.log(req.body.authId);
+        const userId = req.body.authId;
+        const expenses = await Expense.findAll({where:{userId:userId} });
+        // console.log(expenses);
+        const stringyfied = JSON.stringify(expenses);
+        const fileName = `Expense${userId}/${new Date()}.txt`;
+    
+        const fileUrl = await uploadToS3(stringyfied, fileName);
+        
+        res.status(200).json({fileUrl, success:true})
+        // res.send("downloadFileCalled");
+        }
+
+    catch(err){
+        console.log(err);
+        res.status(500).json({message:"something went wrong", success:false})
+        
+    }
+    
 }

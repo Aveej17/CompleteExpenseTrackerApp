@@ -59,6 +59,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             document.getElementById('rzp-button').style.display = 'none';
             document.getElementById('premium-message').style.display = 'block'; 
             document.getElementById('show leaderBoard').style.display = 'block'; 
+            document.getElementById('downloadFile').style.display = 'block';
         }
     } catch (error) {
         console.error("Error loading expenses:", error);
@@ -285,5 +286,33 @@ document.getElementById('show leaderBoard').onclick = async function (e) {
             leaderBoardItem.appendChild(listItem);
             // console.log(item);  
         })
+    }
+}
+
+document.getElementById("downloadFile").onclick = async (e)=>{
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('No authorization token found. Please log in again.');
+            return;
+        }
+
+        // Make the GET request with the authorization token
+        const response = await axios.get('http://localhost:3000/expenses/downloadFile', {
+            headers: { Authorization: 'Bearer ' + token }
+        });
+
+        // This will help us to download the file
+
+        // if (response.data && response.data.fileUrl) {
+        //     // Redirect to the file URL to trigger the download
+        //     window.location.href = response.data.fileUrl;
+        // } else {
+        //     alert('File URL not found in the response.');
+        // }
+        
+    } catch (error) {
+        console.error('Error downloading file:', error);
+        alert('An error occurred while downloading the file. Please try again.');
     }
 }
