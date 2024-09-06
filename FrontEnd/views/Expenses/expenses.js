@@ -34,37 +34,125 @@ async function handleFormSubmit(event) {
         console.error("Error adding expense:", error);
     }
 }
-  
+
 window.addEventListener("DOMContentLoaded", async () => {
     try {
-        // Fetch existing expenses from the server
-
         const token = localStorage.getItem('token');
-        let response = await axios.get("http://localhost:3000/expenses/get", {headers: {
-            Authorization: 'Bearer ' + token}
-        });
-        
-        // console.log(response);
-        // console.log(response.data);
-        
-        // Display each expense on the screen
-        if(response.data.expenses.length>0){
-            response.data.expenses.forEach(expense => {
-                addExpenseToList(expense);
+        let currentPage = 1; // Start with the first page
+        const limit = 2; // Number of expenses per page
+
+        // Function to fetch and display expenses for a specific page
+        const fetchExpenses = async (page) => {
+            try {
+                let response = await axios.get(`http://localhost:3000/expenses/get?page=${page}&limit=${limit}`, {
+                    headers: { Authorization: 'Bearer ' + token }
+                });
+
+                // Clear the existing list
+                document.getElementById('expenseList').innerHTML = "";
+
+                // Display each expense on the screen
+                if (response.data.expenses.length > 0) {
+                    response.data.expenses.forEach(expense => {
+                        addExpenseToList(expense);
+                    });
+                }
+
+                // Hiding the premium button for the premium user
+                if (response.data.isPremium) {
+                    document.getElementById('rzp-button').style.display = 'none';
+                    document.getElementById('premium-message').style.display = 'block';
+                    document.getElementById('show leaderBoard').style.display = 'block';
+                    document.getElementById('downloadFile').style.display = 'block';
+                }
+
+                // Update pagination display
+                updatePagination(response.data.currentPage, response.data.totalPages);
+            } catch (error) {
+                console.error("Error loading expenses:", error);
             }
-        );
-        }
-        // Hiding the premium button for the premium user
-        if (response.data.isPremium) {
-            document.getElementById('rzp-button').style.display = 'none';
-            document.getElementById('premium-message').style.display = 'block'; 
-            document.getElementById('show leaderBoard').style.display = 'block'; 
-            document.getElementById('downloadFile').style.display = 'block';
-        }
+        };
+
+        // Function to update pagination buttons
+        const updatePagination = (currentPage, totalPages) => {
+            const paginationElement = document.getElementById('pagination');
+            paginationElement.innerHTML = ""; // Clear existing pagination
+
+            // Create "First" button
+            const firstButton = document.createElement('button');
+            firstButton.textContent = "First";
+            firstButton.disabled = currentPage === 1; // Disable if on the first page
+            firstButton.onclick = () => fetchExpenses(1);
+            paginationElement.appendChild(firstButton);
+
+            // Create "Previous" button
+            const prevButton = document.createElement('button');
+            prevButton.textContent = "Previous";
+            prevButton.disabled = currentPage === 1; // Disable if on the first page
+            prevButton.onclick = () => fetchExpenses(currentPage - 1);
+            paginationElement.appendChild(prevButton);
+
+            // Create "Current" page button
+            const currentButton = document.createElement('button');
+            currentButton.textContent = currentPage;
+            currentButton.disabled = true; // Always disabled, represents the current page
+            paginationElement.appendChild(currentButton);
+
+            // Create "Next" button
+            const nextButton = document.createElement('button');
+            nextButton.textContent = "Next";
+            nextButton.disabled = currentPage === totalPages; // Disable if on the last page
+            nextButton.onclick = () => fetchExpenses(currentPage + 1);
+            paginationElement.appendChild(nextButton);
+
+            // Create "Last" button
+            const lastButton = document.createElement('button');
+            lastButton.textContent = "Last";
+            lastButton.disabled = currentPage === totalPages; // Disable if on the last page
+            lastButton.onclick = () => fetchExpenses(totalPages);
+            paginationElement.appendChild(lastButton);
+        };
+
+        // Fetch and display the first page of expenses
+        fetchExpenses(currentPage);
+
     } catch (error) {
-        console.error("Error loading expenses:", error);
+        console.error("Error initializing the page:", error);
     }
 });
+
+
+  
+// window.addEventListener("DOMContentLoaded", async () => {
+//     try {
+//         // Fetch existing expenses from the server
+
+//         const token = localStorage.getItem('token');
+//         let response = await axios.get("http://localhost:3000/expenses/get", {headers: {
+//             Authorization: 'Bearer ' + token}
+//         });
+        
+//         // console.log(response);
+//         // console.log(response.data);
+        
+//         // Display each expense on the screen
+//         if(response.data.expenses.length>0){
+//             response.data.expenses.forEach(expense => {
+//                 addExpenseToList(expense);
+//             }
+//         );
+//         }
+//         // Hiding the premium button for the premium user
+//         if (response.data.isPremium) {
+//             document.getElementById('rzp-button').style.display = 'none';
+//             document.getElementById('premium-message').style.display = 'block'; 
+//             document.getElementById('show leaderBoard').style.display = 'block'; 
+//             document.getElementById('downloadFile').style.display = 'block';
+//         }
+//     } catch (error) {
+//         console.error("Error loading expenses:", error);
+//     }
+// });
 
 function addExpenseToList(expenseDetails) {
     const listItem = document.createElement('li');
@@ -310,7 +398,7 @@ document.getElementById("downloadFile").onclick = async (e)=>{
         // } else {
         //     alert('File URL not found in the response.');
         // }
-        
+
     } catch (error) {
         console.error('Error downloading file:', error);
         alert('An error occurred while downloading the file. Please try again.');

@@ -10,33 +10,68 @@ const AWS = require('aws-sdk');
 require('dotenv').config();
 
 
-exports.getExpenses = async (req, res, next) =>{
+exports.getExpenses = async (req, res, next) => {
     try {
-        // console.log(req.body.authId);
-        // console.log("getEX");
-        
-        
         if (!req.body.authId) {
             return res.status(400).json({ message: 'User ID is required.' });
         }
 
-        const expenses = await Expense.findAll({
-            where: { userId: req.body.authId }
+        // Extract pagination parameters from query
+        const page = parseInt(req.query.page) || 1; // default to page 1 if not specified
+        const limit = parseInt(req.query.limit) || 10; // default to 10 expenses per page if not specified
+        const offset = (page - 1) * limit;
+
+        // Fetch expenses for the user with pagination
+        const expenses = await Expense.findAndCountAll({
+            where: { userId: req.body.authId },
+            limit: limit,
+            offset: offset
         });
+
         const user = await User.findByPk(req.body.authId);
 
         const customResponse = {
-            expenses:expenses,
-            isPremium:user.isPremiumUser
-        }
-        // console.log(customResponse);
-        
+            expenses: expenses.rows, // expenses for the current page
+            totalExpenses: expenses.count, // total number of expenses for the user
+            currentPage: page,
+            totalPages: Math.ceil(expenses.count / limit),
+            isPremium: user.isPremiumUser
+        };
 
         res.json(customResponse);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+};
+
+
+// exports.getExpenses = async (req, res, next) =>{
+//     try {
+//         // console.log(req.body.authId);
+//         // console.log("getEX");
+        
+        
+//         if (!req.body.authId) {
+//             return res.status(400).json({ message: 'User ID is required.' });
+//         }
+
+//         const expenses = await Expense.findAll({
+//             where: { userId: req.body.authId }
+//         });
+//         const user = await User.findByPk(req.body.authId);
+
+//         const customResponse = {
+//             expenses:expenses,
+//             isPremium:user.isPremiumUser
+//         }
+//         // console.log(customResponse);
+        
+
+//         res.json(customResponse);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// }
 
 exports.createExpense = async (req, res, next) =>{
     const t = await sequelize.transaction();
