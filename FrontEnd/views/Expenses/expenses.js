@@ -37,9 +37,41 @@ async function handleFormSubmit(event) {
 
 window.addEventListener("DOMContentLoaded", async () => {
     try {
+
+        const rowsElement = document.getElementById('rows');
+        
+        const savedLimit = localStorage.getItem('limit');
+        if (savedLimit) {
+            rowsElement.value = savedLimit; // Restore the previous limit selection
+        }
         const token = localStorage.getItem('token');
         let currentPage = 1; // Start with the first page
-        const limit = 2; // Number of expenses per page
+        const limit = localStorage.getItem('limit'); // Number of expenses per page
+        if(limit == null){
+            limit = 10;
+        }
+        // console.log(limit);
+        
+        
+
+
+        // Function to get the current limit
+        function getLimit() {
+            return rowsElement.value; // Fetch the selected value dynamically
+        }
+
+        // Event listener for changes in the dropdown
+        rowsElement.addEventListener('change', function() {
+        const limit = getLimit(); // Update the limit whenever the dropdown changes
+        // console.log(limit);
+        localStorage.setItem('limit', limit);
+        rowsElement.value = limit;
+        // Call the function to fetch data or update the UI here using the new limit
+        });
+
+        // Initial log to show the default selected value
+        // console.log(getLimit());
+        
 
         // Function to fetch and display expenses for a specific page
         const fetchExpenses = async (page) => {

@@ -37,9 +37,17 @@
         <br>
         <div id="expenseList"></div> 
         <div id="pagination"></div>
-        <br>
+        <select id="rows">
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+            <option>20</option>
+        </select>
+   
         <h1 id="leaderBoard" style="display: none;">Leader Board</h1>
         <ul  id="leaderBoardItem"></ul>
+        <button id="downloadFile" type="submit" style="display: none;">Download File</button>
+        <br><br>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
