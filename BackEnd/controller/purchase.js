@@ -10,8 +10,8 @@ exports.purchaseCreateController = async (req, res, next) => {
 
     try {
         const rzp = new Razorpay({
-            key_id: 'rzp_test_QvbON6FIPij43r',
-            key_secret: 'OCK5SyCRNPQaYEHpBliiGxJA',
+            key_id: process.env.RZP_KEY_ID,
+            key_secret: process.env.RZP_KEY_SECRET,
         });
 
         const amount = 2500;

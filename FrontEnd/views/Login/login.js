@@ -7,7 +7,7 @@ async function handleFormSubmit(event){
             emailId : event.target.email.value,
             password: event.target.password.value
         }
-        // console.log(userDetails+ "Before reaching Backend");
+        console.log(userDetails+ "Before reaching Backend");
         
 
         // const token = localStorage.getItem('token');

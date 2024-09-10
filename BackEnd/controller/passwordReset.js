@@ -5,7 +5,6 @@ const User = require('../model/users');
 const Forgotpassword = require('../model/forgotPassword');
 const sequelize = require('../util/database');
 
-require('dotenv').config();
 
 // Configure Mailtrap SMTP transporter
 const transporter = nodemailer.createTransport({

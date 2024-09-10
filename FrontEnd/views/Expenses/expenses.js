@@ -46,14 +46,8 @@ window.addEventListener("DOMContentLoaded", async () => {
         }
         const token = localStorage.getItem('token');
         let currentPage = 1; // Start with the first page
-        const limit = localStorage.getItem('limit'); // Number of expenses per page
-        if(limit == null){
-            limit = 10;
-        }
-        // console.log(limit);
-        
-        
-
+         
+        const limit = rowsElement.value; 
 
         // Function to get the current limit
         function getLimit() {
@@ -89,8 +83,8 @@ window.addEventListener("DOMContentLoaded", async () => {
                         addExpenseToList(expense);
                     });
                 }
-
-                // Hiding the premium button for the premium user
+                
+                // Hiding the buy premium button for the premium user
                 if (response.data.isPremium) {
                     document.getElementById('rzp-button').style.display = 'none';
                     document.getElementById('premium-message').style.display = 'block';
@@ -281,7 +275,8 @@ document.getElementById('rzp-button').onclick = async function (e) {
                     alert('You are a premium user now!');
                     document.getElementById('rzp-button').style.display = 'none';
                     document.getElementById('premium-message').style.display = 'block'; 
-                    document.getElementById('show leaderBoard').style.display = 'block'; 
+                    document.getElementById('show leaderBoard').style.display = 'block';
+                    document.getElementById('downloadFile').style.display = 'block'; 
 
 
                 } catch (error) {
@@ -424,12 +419,12 @@ document.getElementById("downloadFile").onclick = async (e)=>{
 
         // This will help us to download the file
 
-        // if (response.data && response.data.fileUrl) {
-        //     // Redirect to the file URL to trigger the download
-        //     window.location.href = response.data.fileUrl;
-        // } else {
-        //     alert('File URL not found in the response.');
-        // }
+        if (response.data && response.data.fileUrl) {
+            // Redirect to the file URL to trigger the download
+            window.location.href = response.data.fileUrl;
+        } else {
+            alert('File URL not found in the response.');
+        }
 
     } catch (error) {
         console.error('Error downloading file:', error);

@@ -6,10 +6,6 @@ const sequelize = require('../util/database');
 const AWS = require('aws-sdk');
 
 
-
-require('dotenv').config();
-
-
 exports.getExpenses = async (req, res, next) => {
     try {
         if (!req.body.authId) {
@@ -157,7 +153,7 @@ exports.deleteExpenses = async (req, res, next) => {
     const t = await sequelize.transaction(); // Start the transaction
 
     try {
-        console.log("Delete Called");
+        // console.log("Delete Called");
 
         const expenseId = req.params.id;
 
@@ -223,7 +219,7 @@ exports.editExpenses = async (req, res, next) =>{
                         
                 }
                 else{
-                    console.log("success ", s3response);      
+                    // console.log("success ", s3response);      
                         resolve(s3response.Location);  
                     }
             })
